@@ -16,5 +16,12 @@ public class Main {
         }
         Query shire = new Query();
         shire.queryShire(args[0]);
+
+        // Convert results to json
+        
+
+        // Write out to file
+        WriteFile writer = new WriteFile();
+
     }
 }
