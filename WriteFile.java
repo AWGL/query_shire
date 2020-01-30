@@ -1,9 +1,16 @@
 package nhs.cardiff.genetics;
 
+/**
+ * @author Sara Rey
+ * @Date 28/01/2020
+ * @version 1.0.0
+ */
+
 public class WriteFile {
 
     public WriteFile() {
-        System.out.println("Writing my file");
+        // Write out json file
+
     }
 
 }
