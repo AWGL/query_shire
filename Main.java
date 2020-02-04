@@ -1,7 +1,6 @@
 package nhs.cardiff.genetics;
 
 import java.io.*;
-import java.sql.ResultSet;
 
 /**
  * @author Sara Rey
@@ -12,12 +11,56 @@ import java.sql.ResultSet;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        // Bit hacky but set this to false if not testing
-        boolean testing = true;
+        // Command line argument parsing (bit hacky, but want to have as few dependencies as possible)
+        boolean testing = false;
+        boolean writeFile = false;
+        File outputFile = new File("output.json");
 
-        // Get command line arguments
-        if (args.length != 1) {
-            throw new IllegalArgumentException("Too many command line arguments passed. Only one worksheet at a time.");
+        if (args.length < 1) {
+            throw new Exception("A minimum of one command line argument is required. Please see documentation " +
+                    "or readme file for details of command line arguments. ");
+        } else if (args.length == 1) {
+            // Default options- not testing and print to stream
+            testing = false;
+            writeFile = false;
+
+        } else if (args.length == 2) {
+            // Testing or not testing
+            try {
+                testing = Boolean.parseBoolean(args[1]);
+            } catch (Exception e) {
+                throw new Exception("Second commandline argument could not be interpreted as either true or false. " +
+                        "Please see documentation or readme file for details of command line arguments. " + e);
+            }
+            writeFile = false;
+
+        } else if (args.length == 3) {
+            // Testing or not testing and write out to file
+            try {
+                testing = Boolean.parseBoolean(args[1]);
+            } catch (Exception e) {
+                throw new Exception("Second commandline argument could not be interpreted as either true or false. " +
+                        "Please see documentation or readme file for details of command line arguments. " + e);
+            }
+            writeFile = true;
+            try {
+                outputFile = new File(args[2]);
+            } catch (Exception e) {
+                throw new Exception("Third commandline argument could not be interpreted as a file name. " +
+                        "Please see documentation or readme file for details of command line arguments. " + e);
+            }
+
+        } else {
+            throw new IllegalArgumentException("More than three command line arguments cannot be interpreted. " +
+                    "Please see documentation or readme file for details of command line arguments.");
+        }
+
+        // Get worksheet id
+        String worksheetId = null;
+        try {
+            worksheetId = args[0];
+        } catch (Exception e) {
+            throw new Exception("Worksheet ID could not be identified from command line argument. " + e);
         }
 
         // Get database and driver
@@ -33,22 +76,20 @@ public class Main {
 
         // Query the database
         Query shire = new Query(db, databaseObject.getUrl());
-        ResultSet result = shire.queryShire(args[0]);
+        Worksheet worksheet = shire.queryShire(worksheetId, testing);
 
-        //TODO working here
-        while (result.next()){
-            System.out.println(result);
+        //Check for empty results set
+        if (worksheet.getSamples().isEmpty()) {
+            throw new Exception("No data was retrieved from Shire for Worksheet " + worksheetId);
         }
 
-        // Make worksheet object
-        Worksheet worksheet = new Worksheet("19M00000"); //TODO WORK HERE
-
-        // Convert results to json
+        // Convert results to json and write out to file
         Json jsonConvert = new Json();
         jsonConvert.json(worksheet);
-
-        // Write out to file
-        WriteFile writer = new WriteFile();
-
+        if (writeFile) {
+            jsonConvert.writeJsonFile(outputFile);
+        } else {
+            jsonConvert.writeJsonStream(System.out);
+        }
     }
 }
