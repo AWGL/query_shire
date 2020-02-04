@@ -1,5 +1,6 @@
 package nhs.cardiff.genetics;
 
+import java.io.*;
 import java.sql.ResultSet;
 
 /**
@@ -10,21 +11,28 @@ import java.sql.ResultSet;
 
 public class Main {
 
-        //private String db = "M:\\Pyrosequencing\\Pyrosequencing Service\\PCR & PYRO spreadsheets\\Log\\IT\\SHIRE COPY FOR PYRO.MDB";
-        //private String url = ("jdbc:odbc:Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=" + db);
-
     public static void main(String[] args) throws Exception {
+        // Bit hacky but set this to false if not testing
+        boolean testing = true;
+
         // Get command line arguments
         if (args.length != 1) {
             throw new IllegalArgumentException("Too many command line arguments passed. Only one worksheet at a time.");
         }
-        /*
-        Query shire = new Query("M:\\Pyrosequencing\\Pyrosequencing Service\\PCR & PYRO spreadsheets\\" +
-                "Log\\IT\\SHIRE COPY FOR PYRO.MDB",
-                "jdbc:odbc:Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=");
-         */
-        Query shire = new Query("C:\\Users\\saram\\IdeaProjects\\query_shire\\Testing.accdb", //TODO TMP
-                "jdbc:odbc:Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=");
+
+        // Get database and driver
+        Database databaseObject = new Database();
+
+        if (testing) {
+            // Update database values to match test database location
+            File f = new File("Testing.accdb");
+            String databaseLoc = f.getAbsolutePath();
+            databaseObject.setDb(databaseLoc);
+        }
+        String db = databaseObject.getDb();
+
+        // Query the database
+        Query shire = new Query(db, databaseObject.getUrl());
         ResultSet result = shire.queryShire(args[0]);
 
         //TODO working here
