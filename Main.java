@@ -23,9 +23,14 @@ public class Main {
                 "Log\\IT\\SHIRE COPY FOR PYRO.MDB",
                 "jdbc:odbc:Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=");
          */
-        Query shire = new Query("C:\\Users\\saram\\IdeaProjects\\query_shire\\Test.accdb", //TODO TMP
+        Query shire = new Query("C:\\Users\\saram\\IdeaProjects\\query_shire\\Testing.accdb", //TODO TMP
                 "jdbc:odbc:Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=");
         ResultSet result = shire.queryShire(args[0]);
+
+        //TODO working here
+        while (result.next()){
+            System.out.println(result);
+        }
 
         // Make worksheet object
         Worksheet worksheet = new Worksheet("19M00000"); //TODO WORK HERE
