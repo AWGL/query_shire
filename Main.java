@@ -14,7 +14,7 @@ public class Main {
         // Command line argument parsing (bit hacky, but want to have as few dependencies as possible)
         boolean testing = false;
         boolean writeFile = false;
-        File outputFile = new File("output.json");
+        File outputFile = new File("output.json"); // Default file name
 
         if (args.length < 1) {
             throw new Exception("A minimum of one command line argument is required. Please see documentation " +

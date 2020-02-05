@@ -44,8 +44,8 @@ public class Query {
                     + " INNER JOIN DNALAB_TEST ON (DNA_TEST.TEST = DNALAB_TEST.TEST) "
                     + " AND (DNA_WORKSHEET_DET.LABNO = DNALAB_TEST.LABNO)) "
                     + " INNER JOIN DNALAB ON DNA_WORKSHEET_DET.LABNO = DNALAB.LABNO)"
-                    + " INNER JOIN PATIENT ON DNALAB.INTID = PATIENT.INTID"
-                    + " WHERE (((DNA_WORKSHEET.WORKSHEET)=?) AND ((DNA_WORKSHEET_DET.LABNO)<>'')"
+                    + " INNER JOIN PATIENT ON DNALAB.INTID = PATIENT.INTID "
+                    + " WHERE (((DNA_WORKSHEET.WORKSHEET)=?) AND ((DNA_WORKSHEET_DET.LABNO)<>''))"
                     + " ORDER BY DNA_WORKSHEET_DET.POSITION ASC;";
         }
 
