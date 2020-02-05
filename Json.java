@@ -1,6 +1,5 @@
 package nhs.cardiff.genetics;
 
-import com.fasterxml.jackson.core.json.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
